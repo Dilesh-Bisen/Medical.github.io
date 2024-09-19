@@ -72,40 +72,47 @@ def predict_symptoms(symptom_input):
         return {"Error": "An error occurred while processing the prediction or retrieving data."}
 
 
-# Custom CSS for a medical look
+# Custom CSS for an attractive medical look
 st.markdown("""
 <style>
     body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f8f9fa;
-        color: #333;
+        font-family: 'Helvetica', sans-serif;
+        background: linear-gradient(to right, #00c6ff, #0072ff);
+        color: #ffffff;
+        padding: 20px;
     }
     .title {
-        color: #007bff;
-        font-size: 2.5em;
+        font-size: 3em;
         text-align: center;
-        margin: 30px 0;
+        margin: 20px 0;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
     .recommendation {
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         margin: 20px;
     }
     .recommendation h3 {
-        color: #007bff;
+        color: #0072ff;
     }
     .btn {
-        background-color: #007bff;
+        background-color: #0072ff;
         color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 12px 24px;
         border-radius: 5px;
         cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s;
     }
     .btn:hover {
         background-color: #0056b3;
+    }
+    .symptom-select {
+        margin: 20px 0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -114,7 +121,7 @@ st.markdown("""
 st.markdown("<h1 class='title'>Medical Recommendation System</h1>", unsafe_allow_html=True)
 
 # User input for symptoms
-symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()), max_selections=5)
+symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()), max_selections=5, key='symptoms', className='symptom-select')
 
 if st.button("Get Recommendations", key='get_recommendations'):
     result = predict_symptoms(symptom_input)
