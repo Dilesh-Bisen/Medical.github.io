@@ -1,10 +1,8 @@
-from flask import Flask, render_template, request, jsonify
+import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
 import difflib
-
-app = Flask(__name__)
 
 # Load models and datasets
 model = pickle.load(open("04_Medical/Output_file/model.pkl", "rb"))
@@ -74,23 +72,26 @@ def predict_symptoms(symptom_input):
         return {"Error": "An error occurred while processing the prediction or retrieving data."}
 
 
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("04_Medical/medical_recommendation/templates/index.html")
+# Streamlit app layout
+st.title("Medical Recommendation System")
 
+# User input for symptoms
+symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()))
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    symptom_input = request.json.get('symptoms', [])
+if st.button("Get Recommendations"):
     result = predict_symptoms(symptom_input)
-    return jsonify(result)
+    if "Error" in result:
+        st.error(result["Error"])
+    else:
+        st.subheader("Recommendations")
+        st.write(f"**Disease:** {result['Disease']}")
+        st.write(f"**Description:** {result['Description']}")
+        st.write(f"**Precautions:** {result['Precautions']}")
+        st.write(f"**Medications:** {result['Medications']}")
+        st.write(f"**Workouts:** {result['Workouts']}")
+        st.write(f"**Diets:** {result['Diets']}")
 
-
-@app.route("/symptoms", methods=["GET"])
-def get_symptoms():
-    symptoms = list(symptom_dict.keys())
-    return jsonify(symptoms)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+# Display available symptoms
+if st.checkbox("Show All Symptoms"):
+    st.subheader("Available Symptoms")
+    st.write(list(symptom_dict.keys()))
