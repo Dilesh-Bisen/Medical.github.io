@@ -72,23 +72,40 @@ def predict_symptoms(symptom_input):
         return {"Error": "An error occurred while processing the prediction or retrieving data."}
 
 
-# Custom CSS
+# Custom CSS for a medical look
 st.markdown("""
 <style>
-    .main {
-        background-color: #f0f2f5;
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
     }
     .title {
-        color: #4CAF50;
-        font-size: 2em;
+        color: #007bff;
+        font-size: 2.5em;
         text-align: center;
-        margin-bottom: 20px;
+        margin: 30px 0;
     }
     .recommendation {
         background-color: #ffffff;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+    }
+    .recommendation h3 {
+        color: #007bff;
+    }
+    .btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #0056b3;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -97,9 +114,9 @@ st.markdown("""
 st.markdown("<h1 class='title'>Medical Recommendation System</h1>", unsafe_allow_html=True)
 
 # User input for symptoms
-symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()))
+symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()), max_selections=5)
 
-if st.button("Get Recommendations"):
+if st.button("Get Recommendations", key='get_recommendations'):
     result = predict_symptoms(symptom_input)
     if "Error" in result:
         st.error(result["Error"])
