@@ -72,8 +72,29 @@ def predict_symptoms(symptom_input):
         return {"Error": "An error occurred while processing the prediction or retrieving data."}
 
 
+# Custom CSS
+st.markdown("""
+<style>
+    .main {
+        background-color: #f0f2f5;
+    }
+    .title {
+        color: #4CAF50;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .recommendation {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Streamlit app layout
-st.title("Medical Recommendation System")
+st.markdown("<h1 class='title'>Medical Recommendation System</h1>", unsafe_allow_html=True)
 
 # User input for symptoms
 symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()))
@@ -84,12 +105,14 @@ if st.button("Get Recommendations"):
         st.error(result["Error"])
     else:
         st.subheader("Recommendations")
+        st.markdown("<div class='recommendation'>", unsafe_allow_html=True)
         st.write(f"**Disease:** {result['Disease']}")
         st.write(f"**Description:** {result['Description']}")
         st.write(f"**Precautions:** {result['Precautions']}")
         st.write(f"**Medications:** {result['Medications']}")
         st.write(f"**Workouts:** {result['Workouts']}")
         st.write(f"**Diets:** {result['Diets']}")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # Display available symptoms
 if st.checkbox("Show All Symptoms"):
