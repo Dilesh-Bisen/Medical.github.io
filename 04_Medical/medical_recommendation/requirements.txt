@@ -3,3 +3,4 @@ flask==2.2.3
 Werkzeug==2.3.0
 pandas
 numpy
+sklearn
