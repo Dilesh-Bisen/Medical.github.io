@@ -11,11 +11,11 @@ model = pickle.load(open("04_Medical/Output_file/model.pkl", "rb"))
 symptom_dict = pickle.load(open("04_Medical/Output_file/symptom_dict.pkl", "rb"))
 disease_dict = pickle.load(open("04_Medical/Output_file/disease_dict.pkl", "rb"))
 
-prec = pd.read_csv('DataSets/precautions.csv')
-work = pd.read_csv('DataSets/workout.csv')
-descr = pd.read_csv('DataSets/description.csv')
-medi = pd.read_csv('DataSets/medications.csv')
-diet = pd.read_csv('DataSets/diets.csv')
+prec = pd.read_csv('04_Medical/DataSets/precautions.csv')
+work = pd.read_csv('04_Medical/DataSets/workout.csv')
+descr = pd.read_csv('04_Medical/DataSets/description.csv')
+medi = pd.read_csv('04_Medical/DataSets/medications.csv')
+diet = pd.read_csv('04_Medical/DataSets/diets.csv')
 
 
 def format_list(items):
@@ -76,7 +76,7 @@ def predict_symptoms(symptom_input):
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("04_Medical/medical_recommendation/templates/index.html")
 
 
 @app.route("/predict", methods=["POST"])
