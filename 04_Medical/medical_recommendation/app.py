@@ -7,9 +7,9 @@ import difflib
 app = Flask(__name__)
 
 # Load models and datasets
-model = pickle.load(open("Output_file/model.pkl", "rb"))
-symptom_dict = pickle.load(open("Output_file/symptom_dict.pkl", "rb"))
-disease_dict = pickle.load(open("Output_file/disease_dict.pkl", "rb"))
+model = pickle.load(open("04_Medical/Output_file/model.pkl", "rb"))
+symptom_dict = pickle.load(open("04_Medical/Output_file/symptom_dict.pkl", "rb"))
+disease_dict = pickle.load(open("04_Medical/Output_file/disease_dict.pkl", "rb"))
 
 prec = pd.read_csv('DataSets/precautions.csv')
 work = pd.read_csv('DataSets/workout.csv')
