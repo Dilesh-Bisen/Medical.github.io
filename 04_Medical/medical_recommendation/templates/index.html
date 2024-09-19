@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical AI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container .select2-selection--multiple {
+            background-color: #f8f9fa;
+            border-color: #ced4da;
+            color: #212529;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #fff;
+        }
+        .select2-container--default .select2-results__option {
+            color: #212529;
+        }
+        .output-section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .output-section ul li {
+            color: #007bff; /* Blue color for output */
+        }
+        .output-section p {
+            color: #007bff; /* Blue color for output */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid bg-dark text-light vh-100 d-flex flex-column justify-content-center align-items-center">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-warning">Medical AI Assistant</h1>
+            <p class="lead">Get personalized health insights based on your symptoms</p>
+        </div>
+        <div class="w-100 px-5">
+            <div class="mb-4">
+                <label for="symptoms" class="form-label fs-5">Select Your Symptoms:</label>
+                <select id="symptoms" class="form-select form-select-lg" multiple style="width: 100%; height: 55px;"></select>
+            </div>
+            <div class="d-flex justify-content-around mb-4">
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Disease')">Disease</button>
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Description')">Description</button>
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Precautions')">Precautions</button>
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Medications')">Medicine</button>
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Diets')">Diet</button>
+                <button class="btn btn-warning btn-lg px-4" onclick="fetchResult('Workouts')">Workout</button>
+            </div>
+            <div class="output-section p-4 bg-light rounded shadow-sm">
+                <h2 class="h4 text-dark">Results</h2>
+                <div id="output" class="text-dark mt-3">Your results will be shown here...</div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#symptoms').select2({
+                placeholder: 'Select symptoms',
+                allowClear: true
+            });
+
+            fetch('/symptoms')
+                .then(response => response.json())
+                .then(symptoms => {
+                    const select = $('#symptoms');
+                    symptoms.forEach(symptom => {
+                        const option = new Option(symptom.charAt(0).toUpperCase() + symptom.slice(1), symptom, false, false);
+                        select.append(option);
+                    });
+                    select.trigger('change');
+                });
+        });
+
+        function fetchResult(type) {
+            const symptoms = $('#symptoms').val();
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symptoms })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.Error) {
+                    document.getElementById('output').innerHTML = `<p>${data.Error}</p>`;
+                } else {
+                    const result = data[type];
+                    if (Array.isArray(result)) {
+                        // Display list items with each item on a new line
+                        document.getElementById('output').innerHTML = `<pre>${result.join('\n')}</pre>`;
+                    } else {
+                        // Display a single item
+                        document.getElementById('output').innerHTML = `<pre>${result}</pre>`;
+                    }
+                }
+            })
+            .catch(() => {
+                document.getElementById('output').innerHTML = '<p>An error occurred.</p>';
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
