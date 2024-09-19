@@ -72,71 +72,24 @@ def predict_symptoms(symptom_input):
         return {"Error": "An error occurred while processing the prediction or retrieving data."}
 
 
-# Custom CSS for an attractive medical look
-st.markdown("""
-<style>
-    body {
-        font-family: 'Helvetica', sans-serif;
-        background: linear-gradient(to right, #00c6ff, #0072ff);
-        color: #ffffff;
-        padding: 20px;
-    }
-    .title {
-        font-size: 3em;
-        text-align: center;
-        margin: 20px 0;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    .recommendation {
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #333;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        margin: 20px;
-    }
-    .recommendation h3 {
-        color: #0072ff;
-    }
-    .btn {
-        background-color: #0072ff;
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1em;
-        transition: background-color 0.3s;
-    }
-    .btn:hover {
-        background-color: #0056b3;
-    }
-    .symptom-select {
-        margin: 20px 0;
-    }
-</style>
-""", unsafe_allow_html=True)
-
 # Streamlit app layout
-st.markdown("<h1 class='title'>Medical Recommendation System</h1>", unsafe_allow_html=True)
+st.title("Medical Recommendation System")
 
 # User input for symptoms
-symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()), max_selections=5, key='symptoms', className='symptom-select')
+symptom_input = st.multiselect("Select Symptoms", options=list(symptom_dict.keys()))
 
-if st.button("Get Recommendations", key='get_recommendations'):
+if st.button("Get Recommendations"):
     result = predict_symptoms(symptom_input)
     if "Error" in result:
         st.error(result["Error"])
     else:
         st.subheader("Recommendations")
-        st.markdown("<div class='recommendation'>", unsafe_allow_html=True)
         st.write(f"**Disease:** {result['Disease']}")
         st.write(f"**Description:** {result['Description']}")
         st.write(f"**Precautions:** {result['Precautions']}")
         st.write(f"**Medications:** {result['Medications']}")
         st.write(f"**Workouts:** {result['Workouts']}")
         st.write(f"**Diets:** {result['Diets']}")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 # Display available symptoms
 if st.checkbox("Show All Symptoms"):
