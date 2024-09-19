@@ -1,0 +1,5 @@
+streamlit==1.38.0
+flask==2.2.3
+pandas
+numpy
+# Add any other libraries your app needs
